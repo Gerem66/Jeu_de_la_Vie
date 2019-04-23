@@ -6,9 +6,17 @@ import sys
 import time
 import random
 import platform
-if platform.system() == "Linux": import getch
-else: import msvcrt as getch
 
+try:
+    if platform.system() == "Linux": import getch
+    else: import msvcrt as getch
+except ImportError:
+    if platform.system() == "Linux":
+        print("getch n'est pas installé...\nVeuillez l'installer : 'sudo pip3 install getch'\nVous devez avoir pip d'installé : 'sudo apt-get install python3-pip'")
+    else:
+        print("Vous devez installer la librairie 'msvcrt' pour continuer.")
+    exit()
+    
 class Game_of_Life:
 
     """ DocString for the Game of Life
