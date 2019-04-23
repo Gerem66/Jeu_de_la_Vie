@@ -12,11 +12,13 @@ try:
     else: import msvcrt as getch
 except ImportError:
     if platform.system() == "Linux":
-        print("getch n'est pas installé...\nVeuillez l'installer : 'sudo pip3 install getch'\nVous devez avoir pip d'installé : 'sudo apt-get install python3-pip'")
+        print("getch n'est pas installé...\nVeuillez l'installer")
+        print("Install 'pip3' :\ncurl \"https://bootstrap.pypa.io/get-pip.py\" -o \"get-pip.py\"\npython3 get-pip.py --user")
+        print("Install 'getch' with 'pip3' :\npip3 install py-getch")
     else:
         print("Vous devez installer la librairie 'msvcrt' pour continuer.")
     exit()
-    
+
 class Game_of_Life:
 
     """ DocString for the Game of Life
