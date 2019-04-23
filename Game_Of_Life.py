@@ -2,9 +2,12 @@
 # coding: utf8
 
 import os
+import sys
 import time
 import random
 import platform
+if platform.system() == "Linux": import getch
+else: import msvcrt as getch
 
 class Game_of_Life:
 
@@ -55,22 +58,20 @@ class Game_of_Life:
             self.Map= [[0 for _ in range(self.Height)] for _ in range(self.Width)]
             
             # Edit Mode
-            x, y, I = 0, 0, -1
-            while I != "end":
+            x, y, C = 0, 0, b''
+            while C != b'\r':
                 self.Show(True, x, y)
-                I = input("// ")
-                I = I.lower()
-                for C in I:
-                    if C == "z" and y > 0:
-                        y -= 1
-                    if C == "s" and y < self.Height - 1:
-                        y += 1
-                    if C == "q" and x > 0:
-                        x -= 1
-                    if C == "d" and x < self.Width - 1:
-                        x += 1
-                    if C == "e":
-                        self.Map[x][y] = 0 if self.Map[x][y] == 1 else 1
+                C = getch.getch()
+                if C == b'z' and y > 0:
+                    y -= 1
+                if C == b's' and y < self.Height - 1:
+                    y += 1
+                if C == b'q' and x > 0:
+                    x -= 1
+                if C == b'd' and x < self.Width - 1:
+                    x += 1
+                if C == b'e':
+                    self.Map[x][y] = 0 if self.Map[x][y] == 1 else 1
 
     
     # Affichage du tableau
@@ -80,7 +81,7 @@ class Game_of_Life:
 
         # Edit Mode
         if EditMode:
-            print("Edition Mode [ z,q,s,d + enter => Move | E + enter => Add / Remove block | end + enter => Valid ]")
+            print("Edition Mode [ z,q,s,d => Move | e => Add / Remove block | enter => Valid ]")
 
         # First Line
         print("╔", end='')
@@ -145,36 +146,44 @@ def Clear():
     print("║           Gerem           ║")
     print("╚═══════════════════════════╝\n\n")
 
-def GetInt(Prompt, min = 0, max = 100):
+
+def GetInt(Prompt, min, max, default):
     try:
-        var = int(input(Prompt))
+        var = input(Prompt + " [" + str(min) + "-" + str(max) + "] (" + str(default) + ") : ")
+        if var == "": var = default
+        var = int(var)
         if var < min or var > max:
             var = int(".")
         return var
     except ValueError:
         print("Veuillez entrer une valeur correcte !")
-        GetInt(Prompt)
+        GetInt(Prompt, min, max, default)
 
-def GetFloat(Prompt, min = 0.001, max = 2):
+
+def GetFloat(Prompt, min, max, default):
     try:
-        var = float(input(Prompt))
+        var = input(Prompt + " [" + str(min) + "-" + str(max) + "] (" + str(default) + ") : ")
+        if var == "": var = default
+        var = float(var)
         if var < min or var > max:
             var = float(".")
         return var
     except ValueError:
         print("Veuillez entrer une valeur correcte !")
-        GetFloat(Prompt)
+        GetFloat(Prompt, min, max, default)
 
-def GetString(Prompt, vals):
+
+def GetString(Prompt, vals, default):
     try:
         # All lower
         for v in range(len(vals)):
             vals[v] = vals[v].lower()
         var = input(Prompt).lower()
+        if var == "": var = default
         for v in vals:
             if var == v:
                 return var
         var = float("")
     except ValueError:
         print("Veuillez entrer une valeur correcte !")
-        GetString(Prompt, vals)
+        GetString(Prompt, vals, default)
