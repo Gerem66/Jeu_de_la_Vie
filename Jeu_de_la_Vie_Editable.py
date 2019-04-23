@@ -8,6 +8,10 @@
 import Game_Of_Life as GOL
 from Game_Of_Life import GetInt, GetFloat, GetString, Clear
 
+input("test")
+print("\rtest\r\r")
+exit()
+
 Clear()
 
 try:
