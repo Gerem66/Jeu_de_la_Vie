@@ -104,7 +104,10 @@ class Game_of_Life:
             print("║", end='')
             for x in range(self.Width):
                 if EditMode and x == Edit_X and y == Edit_Y:
-                    print("X", end='')
+                    if self.Map[x][y] == 0:
+                        print("X", end='')
+                    else:
+                        print("▒", end='')
                 elif self.Map[x][y] == 1:
                     print("█", end='')
                 else:
