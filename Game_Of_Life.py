@@ -4,15 +4,24 @@
 import os
 import time
 import random
+import platform
 
 class Game_of_Life:
 
-    """ DocString for the Game of Life """
+    """ DocString for the Game of Life
+    
+    Parameters :
+    speed_game (int):           Duration of a frame
+    width, height (int, int):   Size of the array
+    random (bool):              True: randomize generation, False: manual generation
+    abort (bool):               Quit instantly class (used to get initial variables (like clear_command))
+
+    """
 
     def __init__(self, speed_game, width, height, random, abort = False):
 
         # Set global variables
-        self.clear_command = "cls" # "clear" for linux
+        self.clear_command = "clear" if platform.system() == "Linux" else "cls"
         self.Width = width
         self.Height = height
         self.Random = random
@@ -27,7 +36,13 @@ class Game_of_Life:
         # Live
         Alive = True
         while Alive:
-            Alive = self.NextStep()
+            try:
+                Alive = self.NextStep()
+                if not Alive:
+                    print("Fin de la simulation : version stable atteinte.")
+            except KeyboardInterrupt:
+                print("Fin de la simulation : Interruption par l'utilisateur.")
+                Alive = False
 
 
     # Génération du tableau (ahutomatiquement ou aléatoirement)
@@ -123,11 +138,12 @@ class Game_of_Life:
 
 def Clear():
     os.system(Game_of_Life(0, 0, 0, False, True).clear_command)
-    print("=============================")
-    print("|        Game of Life       |")
-    print("|             by            |")
-    print("|           Gerem           |")
-    print("=============================\n\n")
+    
+    print("╔═══════════════════════════╗")
+    print("║        Game of Life       ║")
+    print("║             by            ║")
+    print("║           Gerem           ║")
+    print("╚═══════════════════════════╝\n\n")
 
 def GetInt(Prompt, min = 0, max = 100):
     try:
