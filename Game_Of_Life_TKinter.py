@@ -7,9 +7,6 @@ import random
 import platform
 from tkinter import *
 
-# Modifs :
-# Mode Edition
-
 try:
     if platform.system() == "Linux": import getch
     else: import msvcrt as getch
@@ -30,12 +27,13 @@ class Game_of_Life:
     Parameters :
     speed_game (int):           Duration of a frame
     width, height (int, int):   Size of the array
+    length (int):               Length of cells
     random (bool):              True: randomize generation, False: manual generation
     abort (bool):               Quit instantly class (used to get initial variables (like clear_command))
 
     """
 
-    def __init__(self, speed_game, width, height, Random, abort = False):
+    def __init__(self, speed_game, width, height, cell_len, Random, abort = False):
 
         # Set global variables
         self.clear_command = "clear" if platform.system() == "Linux" else "cls"
@@ -43,7 +41,7 @@ class Game_of_Life:
         self.Height = height
         self.Random = Random
         self.Speed_Game = int(speed_game * 1000)
-        self.length = 16
+        self.length = cell_len
         self.Run = True
         self.DarkTheme = False
         
@@ -208,7 +206,7 @@ class Game_of_Life:
         self.graph.after(self.Speed_Game, self.NextStep)
 
 def Clear():
-    os.system(Game_of_Life(0, 0, 0, False, True).clear_command)
+    os.system(Game_of_Life(0, 0, 0, 0, False, True).clear_command)
     
     print("╔═════════════════════════════════╗")
     print("║  Game of Life (Graphical Mode)  ║")
