@@ -7,19 +7,6 @@ import random
 import platform
 from tkinter import *
 
-try:
-    if platform.system() == "Linux": import getch
-    else: import msvcrt as getch
-except ImportError:
-    if platform.system() == "Linux":
-        print("getch n'est pas installé...\nVeuillez l'installer")
-        print("Install 'pip3' :\ncurl \"https://bootstrap.pypa.io/get-pip.py\" -o \"get-pip.py\"\npython3 get-pip.py --user")
-        print("Install 'getch' with 'pip3' :\npip3 install py-getch")
-    else:
-        print("Vous devez installer la librairie 'msvcrt' pour continuer.")
-    exit()
-
-
 class Game_of_Life:
 
     """ DocString for the Game of Life
@@ -36,7 +23,7 @@ class Game_of_Life:
     def __init__(self, speed_game, width, height, cell_len, Random, abort = False):
 
         # Set global variables
-        self.clear_command = "clear" if platform.system() == "Linux" else "cls"
+        self.clear_command = "cls" if platform.system() == "Windows" else "clear"
         self.Width = width
         self.Height = height
         self.Random = Random
@@ -48,7 +35,7 @@ class Game_of_Life:
         self.Run = True
         self.DarkTheme = False
         self.frame = 0
-        self.max_frame = 50
+        self.max_frame = 1
         
         self.Theme(True)
 
@@ -108,8 +95,7 @@ class Game_of_Life:
         self.DarkTheme = not self.DarkTheme
 
     def Clear_Graph(self):
-        self.dessin.pack_forget()
-        self.dessin = Canvas(self.graph, width=self.Width * self.length, height=self.Height * self.length, bg=self.color_bg, bd=8)
+        self.dessin.delete('all')
 
     def on_add(self, event):
         self.Speed_Game += 10

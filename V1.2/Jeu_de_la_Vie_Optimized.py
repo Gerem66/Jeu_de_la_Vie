@@ -14,7 +14,7 @@ def CheckAround(x, y):
 
 while True:
     # Show
-    os.system("cls")
+    os.system("cls || clear")
     for y in range(Heigth):
         for x in range(Width):
             print("█" if Map[x][y] == 1 else " ", end='')
