@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf8
 
-# Jeu de la vie (Jeu_de_la_Vie.py)
-# Temps : ~10 min
-# Par : Geremy
-
 import os
 import time
 import random

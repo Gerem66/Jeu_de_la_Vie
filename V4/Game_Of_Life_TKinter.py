@@ -7,6 +7,19 @@ import random
 import platform
 from tkinter import *
 
+try:
+    if platform.system() == "Linux": import getch
+    else: import msvcrt as getch
+except ImportError:
+    if platform.system() == "Linux":
+        print("getch n'est pas installé...\nVeuillez l'installer")
+        print("Install 'pip3' :\ncurl \"https://bootstrap.pypa.io/get-pip.py\" -o \"get-pip.py\"\npython3 get-pip.py --user")
+        print("Install 'getch' with 'pip3' :\npip3 install py-getch")
+    else:
+        print("Vous devez installer la librairie 'msvcrt' pour continuer.")
+    exit()
+
+
 class Game_of_Life:
 
     """ DocString for the Game of Life
@@ -14,7 +27,7 @@ class Game_of_Life:
     Parameters :
     speed_game (int):           Duration of a frame
     width, height (int, int):   Size of the array
-    cell_len (int):             Length of cells
+    length (int):               Length of cells
     random (bool):              True: randomize generation, False: manual generation
     abort (bool):               Quit instantly class (used to get initial variables (like clear_command))
 
@@ -23,21 +36,16 @@ class Game_of_Life:
     def __init__(self, speed_game, width, height, cell_len, Random, abort = False):
 
         # Set global variables
-        self.clear_command = "cls" if platform.system() == "Windows" else "clear"
+        self.clear_command = "clear" if platform.system() == "Linux" else "cls"
         self.Width = width
         self.Height = height
         self.Random = Random
         self.Speed_Game = int(speed_game * 1000)
-        self.Speed_Game -= self.Speed_Game % 10
-        if self.Speed_Game < 1:
-            self.Speed_Game = 1
         self.length = cell_len
         self.Run = True
         self.DarkTheme = False
-        self.frame = 0
-        self.max_frame = 1
         
-        self.Theme(True)
+        self.Theme()
 
         # Abort used to clear function
         if abort: return
@@ -78,29 +86,20 @@ class Game_of_Life:
         self.Theme()
         self.Show()
 
-    def Theme(self, Init = False):
-        # Theme classique
+    def Theme(self):
         if not self.DarkTheme:
             self.color_bg = "white"
             self.color_cell = "black"
-            self.empty_cell = "white"
             self.color_grid = "black"
         # Thème sombre
         else:
             self.color_bg = "black"
             self.color_cell = "white"
-            self.empty_cell = "black"
             self.color_grid = "black"
-        if not Init: self.Clear_Graph()
         self.DarkTheme = not self.DarkTheme
-
-    def Clear_Graph(self):
-        self.dessin.delete('all')
 
     def on_add(self, event):
         self.Speed_Game += 10
-        if self.Speed_Game == 11:
-            self.Speed_Game = 10
         if self.Speed_Game > 5000:
             self.Speed_Game = 5000
         self.Title()
@@ -108,7 +107,7 @@ class Game_of_Life:
     def on_sub(self, event):
         self.Speed_Game -= 10
         if self.Speed_Game < 10:
-            self.Speed_Game = 1
+            self.Speed_Game = 10
         self.Title()
 
     def on_click(self, event):
@@ -122,21 +121,17 @@ class Game_of_Life:
         self.Run = not self.Run
         self.Title()
         if self.Run: self.NextStep()
-        self.Clear_Graph()
-        self.Show()
 
     def on_reset(self, event):
         self.Map = [[0 for _ in range(self.Height)] for _ in range(self.Width)]
         self.Run = False
         self.Title()
-        self.Clear_Graph()
         self.Show()
     
     def on_random(self, event):
         self.Map = [[random.randint(0, 1) for _ in range(self.Height)] for _ in range(self.Width)]
         self.Run = False
         self.Title()
-        self.Clear_Graph()
         self.Show()
 
     # Génération du tableau (ahutomatiquement ou aléatoirement)
@@ -157,10 +152,8 @@ class Game_of_Life:
     def Show(self, EditMode = False, Edit_X = -1, Edit_Y = -1):
         ## Graphical Mode
         # Clear
-        self.frame += 1
-        if self.frame > self.max_frame:
-            self.Clear_Graph()
-            self.frame = 0
+        self.dessin.pack_forget()
+        self.dessin = Canvas(self.graph, width=self.Width * self.length, height=self.Height * self.length, bg=self.color_bg, bd=8)
         
         # Show Grid
         for i in range(self.Width + 1): # Vertical
@@ -175,8 +168,6 @@ class Game_of_Life:
                     continue
                 if self.Map[x][y] == 1:
                     self.dessin.create_rectangle(self.length * x, self.length * y, self.length * (x+1), self.length * (y+1), fill=self.color_cell)
-                else:
-                    self.dessin.create_rectangle(self.length * x, self.length * y, self.length * (x+1), self.length * (y+1), fill=self.empty_cell)
         
         # Draw
         self.dessin.pack()
@@ -219,7 +210,7 @@ def Clear():
     
     print("╔═════════════════════════════════╗")
     print("║  Game of Life (Graphical Mode)  ║")
-    print("║               by                ║")
+    print("║                by               ║")
     print("║              Gerem              ║")
     print("╚═════════════════════════════════╝\n\n")
     print("Commandes :\n- Left click\tAdd / Remove cell\n- Enter\t\tPlay / Pause\n- -/+\t\tIncreases or Reduces time\n- A\t\tRandomize grid\n- R\t\tReset grid\n- T\t\tSwitch Light / Dark Theme\n\n")

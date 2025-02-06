@@ -20,7 +20,7 @@ int	main(void)
 	{
 		tm_print_map(&map);
 		next_step(&map);
-		usleep(10 * 1000);
+		usleep(100 * 1000);
 	}
 
 	free_map(&map);

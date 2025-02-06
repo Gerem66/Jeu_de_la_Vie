@@ -14,14 +14,17 @@ exit()'''
 Clear()
 
 try:
-    width = GetInt("Entrez la largeur du tableau", 5, 500, 40)
-    height = GetInt("Entrez la longueur du tableau", 5, 500, 40)
-    cell_len = GetInt("Entrez la taille d'une cellule", 1, 48, 16)
+    width = GetInt("Entrez la largeur du tableau", 10, 500, 40)
+    height = GetInt("Entrez la longueur du tableau", 10, 500, 40)
+    cell_len = GetInt("Entrez la taille d'une cellule", 4, 48, 16)
     speed_game = GetFloat("Vitesse de développement", 0.001, 5, 0.1)
     rand_str = GetString("Générer le tableau aléatoirement [o/n] (o) ? ", ["y", "o", "n"], "o")
     rand = False if rand_str == "n" else True
 except KeyboardInterrupt:
-    print("Fin de la simulation : Interruption par l'utilisateur.")
+    print("\nFin de la simulation : Interruption par l'utilisateur.")
+    exit()
+except:
+    print("\nUne erreur innatendue est survenue...")
     exit()
 
 game = GOL.Game_of_Life(speed_game, width, height, cell_len, rand)

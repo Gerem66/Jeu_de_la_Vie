@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf8
 
-# Jeu de la vie (Jeu_de_la_Vie_Editable.py + Game_Of_Life.py)
-# Temps : ~1h
-# Par : Geremy
-
 import Game_Of_Life as GOL
 from Game_Of_Life import GetInt, GetFloat, GetString, Clear
 
